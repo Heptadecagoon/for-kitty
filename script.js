@@ -1,50 +1,59 @@
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.querySelector('.yes-btn');
-const questionText = document.getElementById('question');
 const imageArea = document.querySelector('.image-area');
 const questionArea = document.querySelector('.question-area');
 const successMessage = document.getElementById('success-message');
-const body = document.querySelector('body');
 
-// Jokes and references from your chat
-const texts = [
-    "Are you sure, Kitty? 😿",
-    "Don't be an acquaintance! 🐻",
+// Personal jokes from your chats
+const messages = [
+    "No",
+    "Are you sure? 🤨",
+    "Don't be a bad bear! 🐻",
     "I'll set your fielding! 😤",
-    "Aren't you proud of Raj(poot)! 💛",
-    "Do you want to go back to Nanoship?",
-    "But my Aura will go minus! 📉",
-    "Don't make me call back that Aunty! 📞",
+    "Think about the Yellow Dress! 💛",
+    "Back to Nanoship then? 🚢",
+    "My Aura will go minus! 📉",
+    "Don't make me call Aunty! 📞",
     "I'll cry in the corner! 😭",
-    "Are you really sure? (Secretly?)",
-    "Just click Yes, Cutonic! 💅"
+    "Pleaseee Kitty? 🥺",
+    "You're breaking my heart 💔",
+    "Okay, I'm hiding! 🙈"
 ];
 
-let clickCount = 0;
+let messageIndex = 0;
+let yesSize = 1; // Initial font size multiplier
+let noSize = 1;  // Initial font size multiplier
 
-function moveButton() {
-    // Make the Yes button grow
-    const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-    yesBtn.style.fontSize = `${currentSize * 1.2}px`;
-    yesBtn.style.padding = `${parseFloat(window.getComputedStyle(yesBtn).paddingTop) * 1.2}px ${parseFloat(window.getComputedStyle(yesBtn).paddingRight) * 1.2}px`;
-
-    // Change the No button text
-    if (clickCount < texts.length) {
-        noBtn.innerText = texts[clickCount];
-        clickCount++;
+function handleNo() {
+    // 1. Change the text of the No button
+    messageIndex++;
+    // If we run out of messages, just keep showing the last one
+    if (messageIndex < messages.length) {
+        noBtn.innerText = messages[messageIndex];
     } else {
-        noBtn.innerText = "Okay, I'm hiding! 🙈";
-        noBtn.style.opacity = "0"; // Make it disappear eventually
+        noBtn.innerText = "Just click Yes! 😤";
     }
 
-    // Move the button randomly within the container
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    // 2. Make Yes button BIGGER
+    yesSize += 0.5; // Increases size significantly per click
+    yesBtn.style.transform = `scale(${yesSize})`;
     
-    // Ensure it doesn't go off screen
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = `${Math.min(Math.max(0, x), window.innerWidth - 150)}px`;
-    noBtn.style.top = `${Math.min(Math.max(0, y), window.innerHeight - 50)}px`;
+    // 3. Make No button SMALLER
+    noSize -= 0.10; // Decreases size
+    // Prevent it from disappearing completely so she can still *try* to click it
+    if (noSize < 0.2) noSize = 0.2; 
+    noBtn.style.transform = `scale(${noSize})`;
+
+    // Optional: Add a little shake animation to the No button
+    noBtn.animate([
+        { transform: `scale(${noSize}) translateX(0)` },
+        { transform: `scale(${noSize}) translateX(10px)` },
+        { transform: `scale(${noSize}) translateX(-10px)` },
+        { transform: `scale(${noSize}) translateX(0)` }
+    ], {
+        duration: 200,
+        iterations: 1
+    });
 }
 
 function acceptLove() {
@@ -52,7 +61,7 @@ function acceptLove() {
     questionArea.classList.add('hidden');
     successMessage.classList.remove('hidden');
     
-    // Create heavy rain of roses/hearts
+    // Launch confetti/hearts
     createHearts(100);
 }
 
@@ -61,18 +70,17 @@ function createHearts(amount) {
     for (let i = 0; i < amount; i++) {
         const heart = document.createElement('div');
         heart.classList.add('heart');
-        heart.innerHTML = Math.random() > 0.5 ? '🌹' : '💖'; // Roses and Hearts
+        heart.innerHTML = Math.random() > 0.5 ? '🌹' : '💖'; 
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.animationDuration = Math.random() * 3 + 2 + 's';
         heart.style.fontSize = Math.random() * 20 + 20 + 'px';
         container.appendChild(heart);
         
-        // Remove heart after animation to keep DOM clean
         setTimeout(() => {
             heart.remove();
         }, 5000);
     }
 }
 
-// Start gentle background hearts
-setInterval(() => createHearts(2), 500);
+// Background animation
+setInterval(() => createHearts(2), 300);
