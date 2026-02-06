@@ -11,7 +11,7 @@ const texts = [
     "Are you sure? 🤨",
     "Don't be a bad bear! 🐻",
     "I'll set your fielding! 😤",
-    "Think about the Yellow Dress! 💛",
+    "Biryani treat from my side?!",
     "Back to Nanoship then? 🚢",
     "My Aura will go minus! 📉",
     "Don't make me call Aunty! 📞",
